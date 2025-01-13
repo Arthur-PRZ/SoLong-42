@@ -17,7 +17,16 @@
 #include "../libft/libft.h"
 #include <X11/keysym.h>
 
+typedef struct s_mlx_data
+{
+    void    *mlx_start;
+    void    *mlx_window;
+}   t_mlx_data;
+
 #define HEIGHT 800
 #define WIDTH 800
+
+int	handle_input(int keysym, t_mlx_data *ptr);
+
 
 #endif
