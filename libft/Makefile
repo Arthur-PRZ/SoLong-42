@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: artperez <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 14:23:48 by artperez          #+#    #+#              #
-#    Updated: 2024/11/15 14:23:59 by artperez         ###   ########.fr        #
+#    Updated: 2025/01/14 10:31:19 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,9 @@ FC = ft_atoi.c \
 	ft_strtrim.c \
 	ft_substr.c \
 	ft_tolower.c \
-	ft_toupper.c 
+	ft_toupper.c \
+	get_next_line_bonus.c \
+	get_next_line_bonus.c
 
 FO = $(FC:.c=.o)
 

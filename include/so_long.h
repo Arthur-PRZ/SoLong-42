@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/10 11:00:54 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/14 13:15:45 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_mlx_data
 #define WIDTH 800
 
 int	handle_input(int keysym, t_mlx_data *ptr);
+int	clean_exit(t_mlx_data *ptr);
 
 
 #endif
