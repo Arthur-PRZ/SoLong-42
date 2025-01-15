@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/14 14:50:10 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:35:34 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,28 @@ int	clean_exit(t_mlx_data *ptr)
 // 	return (height);
 // }
 
-int	count_height()
+size_t	count_height()
 {
-	int		readbytes
+	int		readbytes;
 	char	*buf;
-	int		height;
+	size_t		height;
 	int		file;
 	
-	height = 0;
-	buf = malloc(char * 3);	
+	height = 1;
+	readbytes = 1;
+	buf = malloc(sizeof(char) * 3);	
 	if (buf == NULL)
-		return (NULL);
-	file = open("/map/map.ber", O_RDONLY);
+		return (0);
+	file = open("/home/artperez/Stud/exercices/so_long/map/map.ber", O_RDONLY);
+	if (file == -1)
+		return (0);
 	while (readbytes != 0)
 	{
 		readbytes = read(file, buf, 2);
 		if (readbytes == -1)
-			return (free(buf), free (line), NULL)
-		if (strchr(buf, '\n'))
+			return (free(buf), close(file), 0);
+		if (ft_strchr_gnl(buf, '\n') == 1)
 			height++;
-		// 1 de plus a la height ?
 	}
 	close (file);
 	return (height);
@@ -113,8 +115,7 @@ char	**get_map(char **map, int height)
 	int		i;
 
 	i = 0;
-	check = 0;
-	file = open("/map/map.ber", O_RDONLY);
+	file = open("/home/artperez/Stud/exercices/so_long/map/map.ber", O_RDONLY);
 	if (file == -1)
 		return (NULL);
 	while (i < height)
@@ -122,7 +123,7 @@ char	**get_map(char **map, int height)
 		map[i] = calloc(1, sizeof(char));
 		line = get_next_line(file);
 		len = ft_strlen(line);
-		ft_strjoin0(map[i], line);
+		map[i] = ft_strjoin0(map[i], line);
 		i++;
 	}
 	free(line);
@@ -133,42 +134,71 @@ char	**get_map(char **map, int height)
 int	check_map()
 {
 	char	**map;
-	char	*line;
-	char	
-	int		len;
-	int		height;
+	size_t		height;
 
 	height = count_height();
-	map = malloc((char *) * height)
+	map = malloc(sizeof(char *) * height);
 	map = get_map(map, height);
-	while (line !=)
-	{
-		line = get_next_line("/map/map.ber")
-		map[i] = line;
-		i++;
-	}
-	if (map == NULL)
+	// while (line !=)
+	// {
+	// 	line = get_next_line("/map/map.ber")
+	// 	map[i] = line;
+	// 	i++;
+	// }
+	// if (map == NULL)
 	exit (0);
 	
 }
-
-int	main()
+int	check_map_name(char *str)
 {
-	t_mlx_data	mlx_data;
+	int	i;
+	int	len;
 	
-	check_map()
-	mlx_data.mlx_start = mlx_init();
-	if (mlx_data.mlx_start == NULL)
-		return (1);
-	
-	mlx_data.mlx_window = mlx_new_window(mlx_data.mlx_start, HEIGHT, WIDTH, "SIUUU");
-	if (mlx_data.mlx_window == NULL)
+	i =
+	i = ft_strlen(str);
+	while (i > 0)
 	{
-		mlx_destroy_display(mlx_data.mlx_start);
-		free(mlx_data.mlx_start);
-		return (1);
+		if (str[i] == '.')
+		{
+			if (ft_strnstr(str + i, "ber", 4) = "ber");
+				return (0);
+		}
+		i--;
 	}
-	mlx_key_hook(mlx_data.mlx_window, handle_input, &mlx_data);
-	mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
-	mlx_loop(mlx_data.mlx_start);
+	return (1);
+}
+int	main(int argc, char **argv)
+{
+	int	i;
+	// t_mlx_data	mlx_data;
+	
+	i = 0;
+	if (argv[0][1])
+		i = 1;
+	if (argc != 2)
+	{
+		ft_printf("Number of argument unvailable");
+		exit (0);
+	}
+	if (check_map_name(argv[2]) = 1)
+	{
+		
+	}
+	//check_map();
+	// check_map()
+	// mlx_data.mlx_start = mlx_init();
+	// if (mlx_data.mlx_start == NULL)
+	// 	return (1);
+	
+	// mlx_data.mlx_window = mlx_new_window(mlx_data.mlx_start, HEIGHT, WIDTH, "SIUUU");
+	// if (mlx_data.mlx_window == NULL)
+	// {
+	// 	mlx_destroy_display(mlx_data.mlx_start);
+	// 	free(mlx_data.mlx_start);
+	// 	return (1);
+	// }
+	// mlx_key_hook(mlx_data.mlx_window, handle_input, &mlx_data);
+	// mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
+	// mlx_loop(mlx_data.mlx_start);
+	return (0);
 }

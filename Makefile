@@ -6,14 +6,14 @@
 #    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 10:15:26 by artperez          #+#    #+#              #
-#    Updated: 2025/01/10 11:14:49 by artperez         ###   ########.fr        #
+#    Updated: 2025/01/15 09:59:39 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LIBFT = libft/libft.a
 MLX = minilibx-linix/libmlx.a
 FC = src/so_long.c
@@ -23,7 +23,7 @@ FO = $(FC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(FO)
-	$(CC) $(CFLAGS) $(FO) -Llibft -Lminilibx-linux -lmlx -lXext -lX11 -o $(NAME)
+	$(CC) $(CFLAGS) $(FO) -Llibft -Lminilibx-linux -lmlx -lft -lXext -lX11 -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -6,7 +6,7 @@
 #    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 14:23:48 by artperez          #+#    #+#              #
-#    Updated: 2025/01/14 10:31:19 by artperez         ###   ########.fr        #
+#    Updated: 2025/01/15 13:03:36 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ BONUS = ft_lstadd_front_bonus.c \
 	ft_lstmap_bonus.c
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 FC = ft_atoi.c \
 	ft_bzero.c \
@@ -60,7 +60,10 @@ FC = ft_atoi.c \
 	ft_tolower.c \
 	ft_toupper.c \
 	get_next_line_bonus.c \
-	get_next_line_bonus.c
+	get_next_line_utils_bonus.c \
+	functions.c \
+	functions2.c \
+	printf.c
 
 FO = $(FC:.c=.o)
 

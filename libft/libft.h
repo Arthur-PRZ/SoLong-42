@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:44:00 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/14 10:28:42 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:40:28 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <limits.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <stdarg.h>
+# include <stdlib.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 3
@@ -83,5 +85,17 @@ char	*ft_getline(char *buffer);
 char	*ft_strjoin_gnl(char *s1, char *s2);
 // void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_free(char *buffer, char *temp_buf);
+size_t	ft_strlen_printf(const char *s);
+int		ft_printf(const char *format, ...);
+int		search_type(char c, va_list args);
+int		ft_putnbr_printf(int n);
+void	ft_putchar(char c);
+int		ft_strlen_int(int nbr);
+int		ft_putstr_len(char *s);
+int		base16(unsigned int nbr, char c);
+int		print_p(void *ptr);
+int		uns_ft_putnbr(unsigned int n);
+int		long_base16(unsigned long nbr, char c);
+
 
 #endif
