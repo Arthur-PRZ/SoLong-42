@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/15 13:35:34 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:46:06 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	clean_exit(t_mlx_data *ptr)
 // 	return (height);
 // }
 
-size_t	count_height()
+size_t	count_height(char *map_name)
 {
 	int		readbytes;
 	char	*buf;
@@ -65,7 +65,8 @@ size_t	count_height()
 	buf = malloc(sizeof(char) * 3);	
 	if (buf == NULL)
 		return (0);
-	file = open("/home/artperez/Stud/exercices/so_long/map/map.ber", O_RDONLY);
+	buf[2] = '\0';
+	file = open(map_name, O_RDONLY);
 	if (file == -1)
 		return (0);
 	while (readbytes != 0)
@@ -76,6 +77,7 @@ size_t	count_height()
 		if (ft_strchr_gnl(buf, '\n') == 1)
 			height++;
 	}
+	// free(buf);
 	close (file);
 	return (height);
 }
@@ -107,7 +109,7 @@ char	*ft_strjoin0(char const *s1, char const *s2)
 	str[i] = '\0';
 	return (str);
 }
-char	**get_map(char **map, int height)
+void	get_map(t_map *ptrptr, char *map_name)
 {
 	char	*line;
 	int		file;
@@ -115,30 +117,26 @@ char	**get_map(char **map, int height)
 	int		i;
 
 	i = 0;
-	file = open("/home/artperez/Stud/exercices/so_long/map/map.ber", O_RDONLY);
+	file = open(map_name, O_RDONLY);
 	if (file == -1)
-		return (NULL);
-	while (i < height)
+		return ;
+	while (i < ptrptr->height)
 	{
-		map[i] = calloc(1, sizeof(char));
+		ptrptr->grid[i] = calloc(1, sizeof(char));
 		line = get_next_line(file);
 		len = ft_strlen(line);
-		map[i] = ft_strjoin0(map[i], line);
+		ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
 		i++;
 	}
 	free(line);
 	close(file);
-	return (map);
 }
 
-int	check_map()
+void	taking_map(char *map_name, t_map *ptr)
 {
-	char	**map;
-	size_t		height;
-
-	height = count_height();
-	map = malloc(sizeof(char *) * height);
-	map = get_map(map, height);
+	ptr->height = count_height(map_name);
+	ptr->grid = malloc(sizeof(char *) * ptr->height);
+	get_map(ptr, map_name);
 	// while (line !=)
 	// {
 	// 	line = get_next_line("/map/map.ber")
@@ -146,46 +144,182 @@ int	check_map()
 	// 	i++;
 	// }
 	// if (map == NULL)
-	exit (0);
+	return ;	
 	
 }
-int	check_map_name(char *str)
+int	check_map_name(char *map_name)
 {
 	int	i;
 	int	len;
 	
-	i =
-	i = ft_strlen(str);
+	i = ft_strlen(map_name);
+	len = ft_strlen(map_name);
 	while (i > 0)
 	{
-		if (str[i] == '.')
+		if (map_name[i] == '.')
 		{
-			if (ft_strnstr(str + i, "ber", 4) = "ber");
+			if (ft_strncmp(ft_strnstr(map_name + i, ".ber", 5), ".ber", len) == 0)
 				return (0);
 		}
 		i--;
 	}
 	return (1);
 }
-int	main(int argc, char **argv)
+
+int	check_map_size(t_map *ptr)
+{
+	int		i;
+	size_t	len;
+	
+	i = 0;
+	len = ft_strlen(ptr->grid[i]);
+	while (i != ptr->height)
+	{
+		if (len != ft_strlen(ptr->grid[i]))
+			return (1);
+		i++;
+	}
+	ptr->width = len;
+	return (0);
+}
+
+int check_map_close_mid(t_map *ptr)
 {
 	int	i;
+	
+	i = 1;
+	while (i < ptr->height - 1)
+	{
+		if (ptr->grid[i][0] != '1' || ptr->grid[i][ptr->width - 1] != '1')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+int	check_map_close(t_map *ptr)
+{
+	int	i;
+	
+	i = 0;
+	while (i < ptr->width)
+	{
+		if (ptr->grid[0][i] != '1')
+			return (1);
+		i++;
+	}
+	i = 0;
+	while (i < ptr->width)
+	{
+		if (ptr->grid[ptr->height - 1][i] != '1')
+			return (1);
+		i++;
+	}
+	if (check_map_close_mid(ptr) == 1)
+		return (1);
+	return (0);
+}
+int	check_map_goodway_playerpos(t_map *ptr, t_playerpos *pos)
+{
+	int	i;
+	int	a;
+	
+	i = 0;
+	a = 0;
+	while(ptr->grid[a][i] != 'P')
+	{
+		i++;
+		if (i > ptr->width)
+		{
+			i = 0;
+			a++;
+		}
+	}
+	pos->width = a;
+	pos->height = i;
+	return (1);
+}
+
+int	check_map_allelement(t_map *ptr, t_playerpos *variables)
+{
+	int	i;
+	int	a;
+	
+	i = 0;
+	a = 0;
+	variables->exit = 0;
+	variables->pos = 0;
+	while(i < ptr->height)
+	{
+		if (ptr->grid[a][i] == 'E')
+			variables->exit++;
+		if (ptr->grid[a][i] == 'C')
+			variables->item = 1;
+		if (ptr->grid[a][i] == 'P')
+			variables->pos++;
+		i++;
+		if(i == ptr->width - 1)
+		{
+			i = 0;
+			a++;
+		}
+	}
+	if (variables->exit == 1 && variables->item == 1 && variables->pos == 1)
+		return (0);
+	return (1);
+}
+
+// int	check_map_goodway(t_map *ptr, t_playerpos *pos)
+// {
+// 	check_map_goodway_playerpos()
+// }
+
+int	check_map(t_map *ptr, t_playerpos *pos)
+{
+	if (check_map_size(ptr) == 1)
+		return (1);
+	if (ptr->height == ptr->width)
+		return (1);
+	if (check_map_close(ptr) == 1)
+		return (1);
+	if (check_map_allelement(ptr, pos) == 1)
+		return (1);
+	// if (check_map_goodway(ptr, pos) == 1)
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	int			i;
+	t_map 		map;
+	t_playerpos	pos;
+
 	// t_mlx_data	mlx_data;
 	
 	i = 0;
-	if (argv[0][1])
-		i = 1;
 	if (argc != 2)
 	{
-		ft_printf("Number of argument unvailable");
+		ft_printf("Number of argument invalid");
 		exit (0);
 	}
-	if (check_map_name(argv[2]) = 1)
+	if (check_map_name(argv[1]) == 1)
 	{
-		
+		ft_printf("Map name invalid");
+		exit (0);
 	}
-	//check_map();
-	// check_map()
+	taking_map(argv[1], &map);
+	if (map.grid == NULL)
+	{
+		ft_printf("Map not found");
+		exit (0);
+	}
+	if (check_map(&map, &pos) == 1)
+	{
+		ft_printf("Map invalid");
+		exit (0);
+	}
+	ft_printf("good");
+	//taking_map();
+	// taking_map()
 	// mlx_data.mlx_start = mlx_init();
 	// if (mlx_data.mlx_start == NULL)
 	// 	return (1);

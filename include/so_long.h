@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/15 09:28:31 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:39:54 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ typedef struct s_mlx_data
     void    *mlx_window;
 }   t_mlx_data;
 
+typedef struct s_map
+{
+    char    **grid;
+    int     height;
+    int     width;
+}   t_map;
+
+typedef struct s_playerpos
+{
+    int height;
+    int width;
+    int exit;
+    int item;
+    int pos;
+} t_playerpos;
+
+
 #define HEIGHT 800
 #define WIDTH 800
 
@@ -32,8 +49,15 @@ int	handle_input(int keysym, t_mlx_data *ptr);
 int	clean_exit(t_mlx_data *ptr);
 size_t	count_height();
 char	*ft_strjoin0(char const *s1, char const *s2);
-char	**get_map(char **map, int height);
-int	check_map();
+void	get_map(t_map *ptrptr, char *map_name);
+void	taking_map(char *map_name, t_map *ptr);
+int	check_map(t_map *ptr, t_playerpos *pos);
+int check_map_close_mid(t_map *ptr);
+int	check_map_close(t_map *ptr);
+int	check_map_goodway(t_map *ptr, t_playerpos *pos);
+int	check_map_size(t_map *ptr);
+int	check_map_allelement(t_map *ptr, t_playerpos *variables);
+
 
 
 #endif
