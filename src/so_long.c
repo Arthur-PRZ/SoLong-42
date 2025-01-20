@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/16 14:46:06 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:37:42 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,8 @@ int	check_map_goodway_playerpos(t_map *ptr, t_playerpos *pos)
 	}
 	pos->width = a;
 	pos->height = i;
-	return (1);
+	pos->exit = 0;
+	return (0);
 }
 
 int	check_map_allelement(t_map *ptr, t_playerpos *variables)
@@ -248,7 +249,7 @@ int	check_map_allelement(t_map *ptr, t_playerpos *variables)
 	a = 0;
 	variables->exit = 0;
 	variables->pos = 0;
-	while(i < ptr->height)
+	while(a < ptr->height)
 	{
 		if (ptr->grid[a][i] == 'E')
 			variables->exit++;
@@ -268,10 +269,69 @@ int	check_map_allelement(t_map *ptr, t_playerpos *variables)
 	return (1);
 }
 
-// int	check_map_goodway(t_map *ptr, t_playerpos *pos)
-// {
-// 	check_map_goodway_playerpos()
-// }
+int	check_map_goodelement(t_map *ptr)
+{
+	int i;
+	int	a;
+	
+	i = 0;
+	a = 0;
+	while (a < ptr->height)
+	{
+		if (ptr->grid[a][i] != '1' && ptr->grid[a][i] != '0' 
+		&& ptr->grid[a][i] != 'E' && ptr->grid[a][i] != 'C' 
+		&& ptr->grid[a][i] != 'P')
+			return (1);
+		i++;
+		if(i == ptr->width - 1)
+		{
+			i = 0;
+			a++;
+		}
+	}
+	return (0);
+}
+
+int	check_map_goodway_items_number(t_map *ptr)
+{
+	int	i;
+	int	a;
+	int	items_number;
+	
+	items_number = 0;
+	i = 0;
+	a = 0;
+	while (a < ptr->width)
+	{
+		if (ptr->grid[a][i] == 'C')
+			items_number++;
+		if (i > ptr->width)
+		{
+			a++;
+			i = 0;
+		}
+		i++;
+	}
+	return (items_number);
+}
+void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos)
+{
+	if (ptr->grid[height][width] == '1')
+		return ;
+	if (ptr->grid[height][width] == 'V')
+		return ;
+	if (ptr->grid[height][width] == 'E')
+		pos->exit = 1;
+	if (ptr->grid[height][width] == 'C')
+		pos->item = pos->item++;
+	if (pos->exit == 1 && pos->item == check_map_goodway_items_number(ptr))
+    	return ;
+	ptr->grid[height][width] = 'V';
+	check_map_goodway(ptr, pos->height + 1, pos->width, pos);
+	check_map_goodway(ptr, pos->height - 1, pos->width, pos);
+	check_map_goodway(ptr, pos->height, pos->width + 1, pos);
+	check_map_goodway(ptr, pos->height, pos->width - 1, pos);
+}
 
 int	check_map(t_map *ptr, t_playerpos *pos)
 {
@@ -281,9 +341,14 @@ int	check_map(t_map *ptr, t_playerpos *pos)
 		return (1);
 	if (check_map_close(ptr) == 1)
 		return (1);
+	if (check_map_goodelement(ptr) == 1)
+		return (1);
 	if (check_map_allelement(ptr, pos) == 1)
 		return (1);
-	// if (check_map_goodway(ptr, pos) == 1)
+	check_map_goodway_playerpos(ptr, pos);
+	check_map_goodway(ptr, pos->height, pos->width, pos);
+	if (pos->exit != 1 || pos->item != check_map_goodway_items_number(ptr))
+		return (1);
 	return (0);
 }
 
@@ -291,6 +356,7 @@ int	main(int argc, char **argv)
 {
 	int			i;
 	t_map 		map;
+	t_map		map_check;
 	t_playerpos	pos;
 
 	// t_mlx_data	mlx_data;
@@ -312,7 +378,9 @@ int	main(int argc, char **argv)
 		ft_printf("Map not found");
 		exit (0);
 	}
-	if (check_map(&map, &pos) == 1)
+	map_check.grid = map.grid;
+	map_check.height = map.height;
+	if (check_map(&map_check, &pos) == 1)
 	{
 		ft_printf("Map invalid");
 		exit (0);

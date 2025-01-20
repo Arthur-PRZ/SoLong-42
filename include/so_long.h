@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/16 14:39:54 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:52:40 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ void	taking_map(char *map_name, t_map *ptr);
 int	check_map(t_map *ptr, t_playerpos *pos);
 int check_map_close_mid(t_map *ptr);
 int	check_map_close(t_map *ptr);
-int	check_map_goodway(t_map *ptr, t_playerpos *pos);
+void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos);
 int	check_map_size(t_map *ptr);
 int	check_map_allelement(t_map *ptr, t_playerpos *variables);
+int	check_map_goodelement(t_map *ptr);
 
 
 
