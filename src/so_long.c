@@ -114,7 +114,6 @@ void	get_map(t_map *ptrptr, char *map_name)
 {
 	char	*line;
 	int		file;
-	int		len;
 	int		i;
 
 	i = 0;
@@ -125,7 +124,6 @@ void	get_map(t_map *ptrptr, char *map_name)
 	{
 		ptrptr->grid[i] = calloc(1, sizeof(char));
 		line = get_next_line(file);
-		len = ft_strlen(line);
 		ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
 		i++;
 		free(line);
@@ -369,16 +367,35 @@ void	free_map(t_map *map)
 	}
 	free(map->grid);
 }
+void	createWindow(t_mlx_data	*mlx_data)
+{
+	mlx_data.mlx_start = mlx_init();
+	if (mlx_data.mlx_start == NULL)
+		return (1);
+	
+	mlx_data.mlx_window = mlx_new_window(mlx_data.mlx_start, HEIGHT, WIDTH, "SIUUU");
+	if (mlx_data.mlx_window == NULL)
+	{
+		mlx_destroy_display(mlx_data.mlx_start);
+		free(mlx_data.mlx_start);
+		return (1);
+	}
+	mlx_key_hook(mlx_data.mlx_window, handle_input, &mlx_data);
+	mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
+	mlx_loop(mlx_data.mlx_start);
+}
+
+void	display(t_mlx_data *mlx_data)
+{
+
+}
 int	main(int argc, char **argv)
 {
-	int			i;
 	t_map 		map;
 	t_map		map_check;
+	t_mlx_data	mlx_data;
 	t_playerpos	pos;
-
-	// t_mlx_data	mlx_data;
 	
-	i = 0;
 	if (argc != 2)
 	{
 		ft_printf("Number of argument invalid");
@@ -403,22 +420,8 @@ int	main(int argc, char **argv)
 		free_map(&map);
 		exit (0);
 	}
+	createWindow(&mlx_data);
+	display(&mlx_data);
 	ft_printf("good");
-	//taking_map();
-	// taking_map()
-	// mlx_data.mlx_start = mlx_init();
-	// if (mlx_data.mlx_start == NULL)
-	// 	return (1);
-	
-	// mlx_data.mlx_window = mlx_new_window(mlx_data.mlx_start, HEIGHT, WIDTH, "SIUUU");
-	// if (mlx_data.mlx_window == NULL)
-	// {
-	// 	mlx_destroy_display(mlx_data.mlx_start);
-	// 	free(mlx_data.mlx_start);
-	// 	return (1);
-	// }
-	// mlx_key_hook(mlx_data.mlx_window, handle_input, &mlx_data);
-	// mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
-	// mlx_loop(mlx_data.mlx_start);
 	return (0);
 }
