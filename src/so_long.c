@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/20 13:37:42 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:31:06 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ size_t	count_height(char *map_name)
 		if (ft_strchr_gnl(buf, '\n') == 1)
 			height++;
 	}
-	// free(buf);
+	free(buf);
 	close (file);
 	return (height);
 }
@@ -98,6 +98,7 @@ char	*ft_strjoin0(char const *s1, char const *s2)
 		str[i] = s1[i];
 		i++;
 	}
+	free((char *)s1);
 	while (s2[a] != '\0')
 	{
 		str[i] = s2[a];
@@ -127,8 +128,8 @@ void	get_map(t_map *ptrptr, char *map_name)
 		len = ft_strlen(line);
 		ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
 		i++;
+		free(line);
 	}
-	free(line);
 	close(file);
 }
 
@@ -234,9 +235,10 @@ int	check_map_goodway_playerpos(t_map *ptr, t_playerpos *pos)
 			a++;
 		}
 	}
-	pos->width = a;
-	pos->height = i;
+	pos->width = i;
+	pos->height = a;
 	pos->exit = 0;
+	pos->item = 0;
 	return (0);
 }
 
@@ -301,11 +303,11 @@ int	check_map_goodway_items_number(t_map *ptr)
 	items_number = 0;
 	i = 0;
 	a = 0;
-	while (a < ptr->width)
+	while (a < ptr->height - 1)
 	{
 		if (ptr->grid[a][i] == 'C')
 			items_number++;
-		if (i > ptr->width)
+		if (i > ptr->width - 1)
 		{
 			a++;
 			i = 0;
@@ -316,27 +318,30 @@ int	check_map_goodway_items_number(t_map *ptr)
 }
 void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos)
 {
-	if (ptr->grid[height][width] == '1')
+	if (height < 0 || height >= ptr->height || width < 0 || width >= ptr->width)
 		return ;
-	if (ptr->grid[height][width] == 'V')
+	if (ptr->grid[height][width] == '1' || ptr->grid[height][width] == 'V')
 		return ;
 	if (ptr->grid[height][width] == 'E')
 		pos->exit = 1;
-	if (ptr->grid[height][width] == 'C')
-		pos->item = pos->item++;
 	if (pos->exit == 1 && pos->item == check_map_goodway_items_number(ptr))
     	return ;
+	if (ptr->grid[height][width] == 'C')
+		pos->item++;
 	ptr->grid[height][width] = 'V';
-	check_map_goodway(ptr, pos->height + 1, pos->width, pos);
-	check_map_goodway(ptr, pos->height - 1, pos->width, pos);
-	check_map_goodway(ptr, pos->height, pos->width + 1, pos);
-	check_map_goodway(ptr, pos->height, pos->width - 1, pos);
+	check_map_goodway(ptr, height + 1, width, pos);
+	check_map_goodway(ptr, height - 1, width, pos);
+	check_map_goodway(ptr, height, width + 1, pos);
+	check_map_goodway(ptr, height, width - 1, pos);
 }
 
 int	check_map(t_map *ptr, t_playerpos *pos)
 {
+	int	items_number;
+	
 	if (check_map_size(ptr) == 1)
 		return (1);
+	items_number = check_map_goodway_items_number(ptr);
 	if (ptr->height == ptr->width)
 		return (1);
 	if (check_map_close(ptr) == 1)
@@ -347,11 +352,23 @@ int	check_map(t_map *ptr, t_playerpos *pos)
 		return (1);
 	check_map_goodway_playerpos(ptr, pos);
 	check_map_goodway(ptr, pos->height, pos->width, pos);
-	if (pos->exit != 1 || pos->item != check_map_goodway_items_number(ptr))
+	if (pos->exit != 1 || pos->item != items_number)
 		return (1);
 	return (0);
 }
 
+void	free_map(t_map *map)
+{
+	int	i;
+	
+	i = map->height - 1;
+	while(i != -1)
+	{
+		free(map->grid[i]);
+		i--;
+	}
+	free(map->grid);
+}
 int	main(int argc, char **argv)
 {
 	int			i;
@@ -383,6 +400,7 @@ int	main(int argc, char **argv)
 	if (check_map(&map_check, &pos) == 1)
 	{
 		ft_printf("Map invalid");
+		free_map(&map);
 		exit (0);
 	}
 	ft_printf("good");

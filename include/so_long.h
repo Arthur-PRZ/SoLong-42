@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/20 12:52:40 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/21 10:31:02 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos);
 int	check_map_size(t_map *ptr);
 int	check_map_allelement(t_map *ptr, t_playerpos *variables);
 int	check_map_goodelement(t_map *ptr);
+void	free_map(t_map *map);
 
 
 
