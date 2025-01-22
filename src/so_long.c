@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/21 12:31:06 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:53:16 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,31 +367,126 @@ void	free_map(t_map *map)
 	}
 	free(map->grid);
 }
-void	createWindow(t_mlx_data	*mlx_data)
+int	createWindow(t_mlx_data	*mlx_data, t_map *map)
 {
-	mlx_data.mlx_start = mlx_init();
-	if (mlx_data.mlx_start == NULL)
+	mlx_data->mlx_start = mlx_init();
+	if (mlx_data->mlx_start == NULL)
 		return (1);
 	
-	mlx_data.mlx_window = mlx_new_window(mlx_data.mlx_start, HEIGHT, WIDTH, "SIUUU");
-	if (mlx_data.mlx_window == NULL)
+	mlx_data->mlx_window = mlx_new_window(mlx_data->mlx_start, map->width * 42, map->height * 42, "SIUUU");
+	if (mlx_data->mlx_window == NULL)
 	{
-		mlx_destroy_display(mlx_data.mlx_start);
-		free(mlx_data.mlx_start);
+		mlx_destroy_display(mlx_data->mlx_start);
+		free(mlx_data->mlx_start);
 		return (1);
 	}
-	mlx_key_hook(mlx_data.mlx_window, handle_input, &mlx_data);
-	mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
-	mlx_loop(mlx_data.mlx_start);
+	mlx_hook(mlx_data->mlx_window, 17, 0, clean_exit, &mlx_data);
+	return (0);
 }
 
-void	display(t_mlx_data *mlx_data)
+void	display(t_mlx_data *mlx_data, t_textures *textures, t_map *map)
 {
+	int	a;
+	int	i;
 
+	a = 0;
+	i = 0;
+	while (a < map->height)
+	{
+		if (map->grid[a][i] == '1')
+			mlx_put_image_to_window(mlx_data->mlx_start, mlx_data->mlx_window, textures->wall, i * 42, a * 42);
+		else if (map->grid[a][i] == '0')
+			mlx_put_image_to_window(mlx_data->mlx_start, mlx_data->mlx_window, textures->floor, i * 42, a * 42);	
+		else if (map->grid[a][i] == 'E')
+			mlx_put_image_to_window(mlx_data->mlx_start, mlx_data->mlx_window, textures->exit, i * 42, a * 42);
+		else if (map->grid[a][i] == 'P')
+			mlx_put_image_to_window(mlx_data->mlx_start, mlx_data->mlx_window, textures->player, i * 42, a * 42);
+		else if (map->grid[a][i] == 'C')
+			mlx_put_image_to_window(mlx_data->mlx_start, mlx_data->mlx_window, textures->collectible, i * 42, a * 42);
+		i++;
+		if (i > map->width - 1)
+		{
+			a++;
+			i = 0;
+		}
+	}
+	mlx_key_hook(mlx_data->mlx_window, handle_input, mlx_data);
+	mlx_loop(mlx_data->mlx_start);
+}
+
+void	free_textures(t_textures *textures, t_mlx_data *mlx_data)
+{
+	if (textures->player)
+		mlx_destroy_image(mlx_data->mlx_start, textures->player);
+	if (textures->exit)
+		mlx_destroy_image(mlx_data->mlx_start, textures->exit);
+	if (textures->collectible)
+		mlx_destroy_image(mlx_data->mlx_start, textures->collectible);
+	if (textures->floor)
+		mlx_destroy_image(mlx_data->mlx_start, textures->floor);
+	if (textures->wall)
+		mlx_destroy_image(mlx_data->mlx_start, textures->wall);
+	
+}
+
+void	map_giving(t_map *rmap, t_map *map)
+{
+	int i;
+	int	a;
+	
+	i = 0;
+	a = 0;
+	rmap->grid = malloc(map->height * sizeof(char *));
+	while (i < map->height)
+	{
+		rmap->grid[i] = malloc(ft_strlen(map->grid[0]) * sizeof(char));
+		i++;
+	}
+	i = 0;
+	while (a < map->height)
+	{
+		if (i == 0)
+			rmap->grid[a] = malloc(ft_strlen(map->grid[0]) * sizeof(char));
+		rmap->grid[a][i] = map->grid[a][i];
+		i++;
+		if (i > (int)ft_strlen(map->grid[0]))
+		{
+			i = 0;
+			rmap->grid[a][ft_strlen(map->grid[0])] = '\0';
+			a++;
+		}
+	}
+}
+void initTextures(t_textures *textures, t_map *map, t_mlx_data *mlx_data)
+{
+    textures->x = 42;
+    textures->y = 42;
+
+    textures->player = mlx_xpm_file_to_image(mlx_data->mlx_start, 
+        "textures/player.xpm", &textures->x, &textures->y);
+    textures->floor = mlx_xpm_file_to_image(mlx_data->mlx_start, 
+        "textures/floor.xpm", &textures->x, &textures->y);
+    textures->exit = mlx_xpm_file_to_image(mlx_data->mlx_start, 
+        "textures/New.xpm", &textures->x, &textures->y);
+    textures->wall = mlx_xpm_file_to_image(mlx_data->mlx_start, 
+        "textures/wall.xpm", &textures->x, &textures->y);
+    textures->collectible = mlx_xpm_file_to_image(mlx_data->mlx_start, 
+        "textures/collectible.xpm", &textures->x, &textures->y);
+
+    if (textures->player == NULL || textures->exit == NULL || 
+        textures->collectible == NULL || textures->floor == NULL || 
+        textures->wall == NULL)
+    {
+        ft_printf("Error: Failed to load one or more textures\n");
+        free_map(map);
+        free_textures(textures, mlx_data);
+        clean_exit(mlx_data);
+    }
 }
 int	main(int argc, char **argv)
 {
 	t_map 		map;
+	t_textures	textures;
 	t_map		map_check;
 	t_mlx_data	mlx_data;
 	t_playerpos	pos;
@@ -412,16 +507,29 @@ int	main(int argc, char **argv)
 		ft_printf("Map not found");
 		exit (0);
 	}
-	map_check.grid = map.grid;
 	map_check.height = map.height;
+	map_giving(&map_check, &map);
 	if (check_map(&map_check, &pos) == 1)
 	{
 		ft_printf("Map invalid");
 		free_map(&map);
 		exit (0);
 	}
-	createWindow(&mlx_data);
-	display(&mlx_data);
+	map.width = map_check.width;
+	if (createWindow(&mlx_data, &map_check) == 1)
+	{
+		free_map(&map);
+		// free_textures(&textures, &mlx_data);
+		exit (0);
+	}
+	initTextures(&textures, &map, &mlx_data);
+	// if (createWindow(&mlx_data) == 1)
+	// {
+	// 	free_map(&map);
+	// 	free_textures(&textures, &mlx_data);
+	// 	exit (0);
+	// }
+	display(&mlx_data, &textures, &map);
 	ft_printf("good");
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/21 10:31:02 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:24:18 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ typedef struct s_playerpos
     int pos;
 } t_playerpos;
 
+typedef struct s_textures
+{
+    int   *player;
+    int   *exit;
+    int   *collectible;
+    void   *wall;
+    char   *floor;
+    int     x;
+    int     y;
+} t_textures;
+
 
 #define HEIGHT 800
 #define WIDTH 800
@@ -59,6 +70,13 @@ int	check_map_size(t_map *ptr);
 int	check_map_allelement(t_map *ptr, t_playerpos *variables);
 int	check_map_goodelement(t_map *ptr);
 void	free_map(t_map *map);
+void	free_textures(t_textures *textures, t_mlx_data *mlx_data);
+int	createWindow(t_mlx_data	*mlx_data, t_map *map_check);
+void	initTextures(t_textures *textures, t_map *map, t_mlx_data *mlx_data);
+void	display(t_mlx_data *mlx_data,  t_textures *textures, t_map *map);
+void	map_giving(t_map *rmap, t_map *map);
+
+
 
 
 
