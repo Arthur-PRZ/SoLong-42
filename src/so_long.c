@@ -288,16 +288,18 @@ void	get_map(t_map *ptrptr, char *map_name)
 
 void	taking_map(char *map_name, t_map *ptr)
 {
+	int	file;
+
+	file = open(map_name, O_RDONLY);
+	if (file == -1)
+	{
+		ft_printf("Error: Map not found");
+		exit (0);
+	}
+	close(file);
 	ptr->height = count_height(map_name);
 	ptr->grid = malloc(sizeof(char *) * ptr->height);
 	get_map(ptr, map_name);
-	// while (line !=)
-	// {
-	// 	line = get_next_line("/map/map.ber")
-	// 	map[i] = line;
-	// 	i++;
-	// }
-	// if (map == NULL)
 	return ;	
 	
 }
@@ -639,7 +641,7 @@ void initTextures(t_textures *textures, t_mlx_data *mlx_data)
     textures->exitopen = mlx_xpm_file_to_image(mlx_data->mlx_start, 
         "textures/exitopen.xpm", &textures->x, &textures->y);
 	textures->wallin = mlx_xpm_file_to_image(mlx_data->mlx_start, 
-        "textures/NewE.xpm", &textures->x, &textures->y);
+        "textures/wallin.xpm", &textures->x, &textures->y);
     if (textures->player == NULL || textures->exit == NULL || 
         textures->collectible == NULL || textures->floor == NULL || 
         textures->wall == NULL || textures->exitopen == NULL || textures->wallin == NULL)
@@ -659,12 +661,12 @@ int	main(int argc, char **argv)
 	
 	if (argc != 2)
 	{
-		ft_printf("Number of argument invalid");
+		ft_printf("Error: Number of argument invalid\n");
 		exit (0);
 	}
 	if (check_map_name(argv[1]) == 1)
 	{
-		ft_printf("Map name invalid");
+		ft_printf("Error: Map name invalid\n");
 		exit (0);
 	}
 	mlx_data.mlx_start = NULL;
@@ -672,7 +674,7 @@ int	main(int argc, char **argv)
 	taking_map(argv[1], &map);
 	if (map.grid == NULL)
 	{
-		ft_printf("Map not found");
+		ft_printf("Error: Map not found\n");
 		exit (0);
 	}
 	mlx_data.map = map;
@@ -681,7 +683,7 @@ int	main(int argc, char **argv)
 	if (check_map(&map_check, &pos) == 1)
 	{
 		free_map(&map_check);
-		ft_printf("Map invalid");
+		ft_printf("Error: Map invalid\n");
 		clean_exit(&mlx_data);
 	}
 	free_map(&map_check);
