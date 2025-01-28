@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/27 11:17:42 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/28 10:53:42 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_playerpos
     int exitwidth;   
     int exit;
     int item;
+    int item_total;
     int pos;
 } t_playerpos;
 
@@ -54,6 +55,7 @@ typedef struct s_mlx_data
     void        *mlx_start;
     void        *mlx_window;
     int         i;
+    int         a;
     t_map       map;
     t_playerpos playerpos;
     t_textures  textures;

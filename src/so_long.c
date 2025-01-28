@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/27 13:02:27 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:53:09 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ int	handle_input(int keysym, t_mlx_data *ptr)
 	if (keysym == 119 )
 		up(ptr);
 	ft_printf("%i\n", ptr->i);
-	if (check_map_goodway_items_number(&ptr->map) == ptr->playerpos.item)
+	if (ptr->playerpos.item_total == ptr->playerpos.item)
 	{
-		findexit(ptr);
+		// if (ptr->a == 1)
+			findexit(ptr);
+		// ptr->a = 1;
 		mlx_put_image_to_window(ptr->mlx_start, ptr->mlx_window,ptr->textures.exitopen,
 		ptr->playerpos.exitwidth * 42, ptr->playerpos.exitheight * 42);
 	}
@@ -51,6 +53,8 @@ void	findexit(t_mlx_data *ptr)
 			i = 0;
 			a++;
 		}
+		if (a > ptr->map.height - 1)
+		 	break ;
 	}
 	ptr->playerpos.exitwidth = i;
 	ptr->playerpos.exitheight = a;
@@ -58,44 +62,46 @@ void	findexit(t_mlx_data *ptr)
 void	left(t_mlx_data *ptr)
 {
 	if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] == 'E'
-		&& check_map_goodway_items_number(&ptr->map) == ptr->playerpos.item)
+		&& ptr->playerpos.item_total == ptr->playerpos.item)
 		clean_exit(ptr);
 	if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] != '1'
 		&& ptr->playerpos.exit == 1)
 	{
+		if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] == 'C')
+			ptr->playerpos.item++;
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = 'E';
 		display(ptr, &ptr->textures, &ptr->map);
 		ptr->playerpos.exit = 0;
-		ptr->i++;
 	}
 	else if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] != '1'
 		&& ptr->playerpos.exit == 0)
 	{
 		if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] == 'E')
 			ptr->playerpos.exit = 1;
-		if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] == 'E')
+		if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] == 'C')
 			ptr->playerpos.item++;
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width - 1] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = '0';
 		display(ptr, &ptr->textures, &ptr->map);
-		ptr->i++;
 	}
+	ptr->i++;
 }
 
 void	right(t_mlx_data *ptr)
 {
 	if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] == 'E'
-		&& check_map_goodway_items_number(&ptr->map) == ptr->playerpos.item)
+		&& ptr->playerpos.item_total == ptr->playerpos.item)
 		clean_exit(ptr);
 	if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] != '1'
 		&& ptr->playerpos.exit == 1)
 	{
+		if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] == 'C')
+			ptr->playerpos.item++;
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = 'E';
 		display(ptr, &ptr->textures, &ptr->map);
 		ptr->playerpos.exit = 0;
-		ptr->i++;
 	}	
 	else if (ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] != '1'
 		&& ptr->playerpos.exit == 0)
@@ -107,22 +113,23 @@ void	right(t_mlx_data *ptr)
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width + 1] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = '0';
 		display(ptr, &ptr->textures, &ptr->map);
-		ptr->i++;
 	}
+	ptr->i++;
 }
 void	up(t_mlx_data *ptr)
 {
 	if (ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] == 'E'
-		&& check_map_goodway_items_number(&ptr->map) == ptr->playerpos.item)
+		&& ptr->playerpos.item_total == ptr->playerpos.item)
 		clean_exit(ptr);
 	if (ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] != '1'
 		&& ptr->playerpos.exit == 1)
 	{
+		if (ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] == 'C')
+			ptr->playerpos.item++;
 		ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = 'E';
 		display(ptr, &ptr->textures, &ptr->map);
 		ptr->playerpos.exit = 0;
-		ptr->i++;
 	}	
 	else if (ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] != '1'
 		&& ptr->playerpos.exit == 0)
@@ -134,23 +141,24 @@ void	up(t_mlx_data *ptr)
 	 	ptr->map.grid[ptr->playerpos.height - 1][ptr->playerpos.width] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = '0';
 		display(ptr, &ptr->textures, &ptr->map);
-		ptr->i++;
 	}
+	ptr->i++;
 }
 
 void	down(t_mlx_data *ptr)
 {
 	if (ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] == 'E'
-		&& check_map_goodway_items_number(&ptr->map) == ptr->playerpos.item)
+		&& ptr->playerpos.item_total == ptr->playerpos.item)
 		clean_exit(ptr);
 	if (ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] != '1'
 		&& ptr->playerpos.exit == 1)
 	{
+		if (ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] == 'C')
+			ptr->playerpos.item++;
 		ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = 'E';
 		display(ptr, &ptr->textures, &ptr->map);
 		ptr->playerpos.exit = 0;
-		ptr->i++;
 	}
 	else if (ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] != '1'
 		&& ptr->playerpos.exit == 0)
@@ -162,8 +170,8 @@ void	down(t_mlx_data *ptr)
 		ptr->map.grid[ptr->playerpos.height + 1][ptr->playerpos.width] = 'P';
 		ptr->map.grid[ptr->playerpos.height][ptr->playerpos.width] = '0';
 		display(ptr, &ptr->textures, &ptr->map);
-		ptr->i++;
 	}
+	ptr->i++;
 }
 
 int	clean_exit(t_mlx_data *mlx_data)
@@ -392,7 +400,6 @@ int	check_map_goodway_playerpos(t_map *ptr, t_playerpos *pos)
 	}
 	pos->width = i;
 	pos->height = a;
-	pos->item = 0;
 	return (0);
 }
 
@@ -478,10 +485,13 @@ void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos)
 		return ;
 	if (ptr->grid[height][width] == 'E')
 		pos->exit = 1;
-	if (pos->exit == 1 && pos->item == check_map_goodway_items_number(ptr))
-    	return ;
 	if (ptr->grid[height][width] == 'C')
+	{
 		pos->item++;
+		ptr->grid[height][width] = 'V';
+	}
+	if (pos->exit == 1 && pos->item == pos->item_total)
+    	return ;
 	ptr->grid[height][width] = 'V';
 	check_map_goodway(ptr, height + 1, width, pos);
 	check_map_goodway(ptr, height - 1, width, pos);
@@ -491,11 +501,9 @@ void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos)
 
 int	check_map(t_map *ptr, t_playerpos *pos)
 {
-	int	items_number;
-	
 	if (check_map_size(ptr) == 1)
 		return (1);
-	items_number = check_map_goodway_items_number(ptr);
+	pos->item_total = check_map_goodway_items_number(ptr);
 	if (ptr->height == ptr->width)
 		return (1);
 	if (check_map_close(ptr) == 1)
@@ -505,9 +513,10 @@ int	check_map(t_map *ptr, t_playerpos *pos)
 	if (check_map_allelement(ptr, pos) == 1)
 		return (1);
 	pos->exit = 0;
+	pos->item = 0;
 	check_map_goodway_playerpos(ptr, pos);
 	check_map_goodway(ptr, pos->height, pos->width, pos);
-	if (pos->exit != 1 || pos->item != items_number)
+	if (pos->exit != 1 || pos->item != pos->item_total)
 		return (1);
 	return (0);
 }
@@ -657,7 +666,6 @@ int	main(int argc, char **argv)
 	t_textures	textures;
 	t_map		map_check;
 	t_mlx_data	mlx_data;
-	t_playerpos	pos;
 	
 	if (argc != 2)
 	{
@@ -680,14 +688,13 @@ int	main(int argc, char **argv)
 	mlx_data.map = map;
 	map_check.height = map.height;
 	map_giving(&map_check, &map);
-	if (check_map(&map_check, &pos) == 1)
+	if (check_map(&map_check, &mlx_data.playerpos) == 1)
 	{
 		free_map(&map_check);
 		ft_printf("Error: Map invalid\n");
 		clean_exit(&mlx_data);
 	}
 	free_map(&map_check);
-	mlx_data.playerpos = pos;
 	map.width = map_check.width;
 	if (createWindow(&mlx_data, &map_check) == 1)
 		clean_exit(&mlx_data);
@@ -706,6 +713,7 @@ int	main(int argc, char **argv)
 	mlx_data.playerpos.exit = 0;
 	mlx_data.playerpos.item = 0;
 	mlx_data.i = 0;
+	mlx_data.a = 0;
 	mlx_hook(mlx_data.mlx_window, 17, 0, clean_exit, &mlx_data);
 	mlx_loop(mlx_data.mlx_start);
 	return (0);
