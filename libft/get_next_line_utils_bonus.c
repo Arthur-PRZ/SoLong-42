@@ -26,7 +26,7 @@ char	*ft_strcpy(char *dest, char *src)
 	return (dest);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc_gnl(size_t nmemb, size_t size)
 {
 	void	*tab;
 	size_t	i;

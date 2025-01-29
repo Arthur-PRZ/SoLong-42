@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/28 12:53:09 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:51:36 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,32 +216,67 @@ int	clean_exit(t_mlx_data *mlx_data)
 // 	return (height);
 // }
 
-size_t	count_height(char *map_name)
-{
-	int		readbytes;
-	char	*buf;
-	size_t		height;
-	int		file;
+// size_t	count_height(char *map_name)
+// {
+// 	int		readbytes;
+// 	char	*buf;
+// 	size_t		height;
+// 	int		file;
 	
-	height = 1;
-	readbytes = 1;
-	buf = malloc(sizeof(char) * 3);	
-	if (buf == NULL)
-		return (0);
-	buf[2] = '\0';
-	file = open(map_name, O_RDONLY);
-	if (file == -1)
-		return (0);
-	while (readbytes != 0)
+// 	height = 1;
+// 	readbytes = 1;
+// 	buf = malloc(sizeof(char) * 3);	
+// 	if (buf == NULL)
+// 		return (0);
+// 	buf[2] = '\0';
+// 	file = open(map_name, O_RDONLY);
+// 	if (file == -1)
+// 		return (0);
+// 	while (readbytes != 0)
+// 	{
+// 		readbytes = read(file, buf, 2);
+// 		if (readbytes == -1)
+// 			return (free(buf), close(file), 0);
+// 		if (ft_strchr_gnl(buf, '\n') == 1)
+// 			height++;
+// 	}
+// 	free(buf);
+// 	close (file);
+// 	return (height);
+// }
+
+char	*readline(int fd)
+{
+	char	*line;
+	int		len;
+
+	line = get_next_line(fd);
+	if (line == NULL)
+		return (NULL);
+	len = ft_strlen(line);
+	if (line[len - 1] == '\n')
+		line[len - 1] = '\0';
+	return (line);		
+}
+size_t	count_height(char *file)
+{
+	int		fd;
+	char	*line;
+	int		height;
+	
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (1);
+	height = 0;
+	while (1)
 	{
-		readbytes = read(file, buf, 2);
-		if (readbytes == -1)
-			return (free(buf), close(file), 0);
-		if (ft_strchr_gnl(buf, '\n') == 1)
-			height++;
+		line = readline(fd);
+		if (line == NULL)
+			break ;
+		height++;
+		free(line);
 	}
-	free(buf);
-	close (file);
+	close(fd);
 	return (height);
 }
 
@@ -269,7 +304,7 @@ char	*ft_strjoin0(char const *s1, char const *s2)
 		a++;
 	}
 	if (str[i - 1] == '\n')
-		str[i - 1] = '\0'; 
+		str[i - 1] = '\0';
 	str[i] = '\0';
 	return (str);
 }
@@ -283,11 +318,15 @@ void	get_map(t_map *ptrptr, char *map_name)
 	file = open(map_name, O_RDONLY);
 	if (file == -1)
 		return ;
+
 	while (i < ptrptr->height)
 	{
-		ptrptr->grid[i] = calloc(1, sizeof(char));
+		ptrptr->grid[i] = ft_calloc(1, sizeof(char));
 		line = get_next_line(file);
-		ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
+		if (line != NULL)
+			ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
+		if (line == NULL && i == ptrptr->height - 1)
+			ptrptr->grid[i] = NULL;
 		i++;
 		free(line);
 	}
@@ -308,6 +347,12 @@ void	taking_map(char *map_name, t_map *ptr)
 	ptr->height = count_height(map_name);
 	ptr->grid = malloc(sizeof(char *) * ptr->height);
 	get_map(ptr, map_name);
+	// if (check_map_size(ptr) == 1)
+	// {
+	// 	ft_printf("Error: Map invalid\n");
+	// 	free_map(ptr);
+	// 	exit (1);
+	// }
 	return ;	
 	
 }
@@ -337,7 +382,7 @@ int	check_map_size(t_map *ptr)
 	
 	i = 0;
 	len = ft_strlen(ptr->grid[i]);
-	while (i != ptr->height)
+	while (i != ptr->height - 1)
 	{
 		if (len != ft_strlen(ptr->grid[i]))
 			return (1);
@@ -372,7 +417,7 @@ int	check_map_close(t_map *ptr)
 		i++;
 	}
 	i = 0;
-	while (i < ptr->width)
+	while (i < ptr->width - 1)
 	{
 		if (ptr->grid[ptr->height - 1][i] != '1')
 			return (1);
@@ -502,7 +547,7 @@ void	check_map_goodway(t_map *ptr, int height, int width, t_playerpos *pos)
 int	check_map(t_map *ptr, t_playerpos *pos)
 {
 	if (check_map_size(ptr) == 1)
-		return (1);
+	 	return (1);
 	pos->item_total = check_map_goodway_items_number(ptr);
 	if (ptr->height == ptr->width)
 		return (1);
@@ -615,22 +660,17 @@ void	map_giving(t_map *rmap, t_map *map)
 	i = 0;
 	a = 0;
 	rmap->grid = malloc(map->height * sizeof(char *));
-	while (i < map->height)
-	{
-		rmap->grid[i] = malloc((ft_strlen(map->grid[0]) + 1) * sizeof(char));
-		i++;
-	}
-	i = 0;
 	while (a < map->height)
 	{
-		rmap->grid[a][i] = map->grid[a][i];
-		i++;
-		if (i > (int)ft_strlen(map->grid[0]) - 1)
+		i = 0;
+		rmap->grid[a] = malloc((ft_strlen(map->grid[0]) + 1) * sizeof(char));
+		while (i < (int)ft_strlen(map->grid[a]))
 		{
-			i = 0;
-			rmap->grid[a][ft_strlen(map->grid[0])] = '\0';
-			a++;
+			rmap->grid[a][i] = map->grid[a][i];
+			i++;
 		}
+		rmap->grid[a][ft_strlen(map->grid[a])] = '\0';
+		a++;
 	}
 }
 void initTextures(t_textures *textures, t_mlx_data *mlx_data)
@@ -690,7 +730,6 @@ int	main(int argc, char **argv)
 	map_giving(&map_check, &map);
 	if (check_map(&map_check, &mlx_data.playerpos) == 1)
 	{
-		free_map(&map_check);
 		ft_printf("Error: Map invalid\n");
 		clean_exit(&mlx_data);
 	}
