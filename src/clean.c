@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:56:53 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/30 11:33:22 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:14:31 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	free_map(t_map *map)
 {
 	int	i;
-	
+
 	i = map->height - 1;
-	while(i != -1)
+	while (i != -1)
 	{
 		free(map->grid[i]);
 		i--;
@@ -46,15 +46,15 @@ void	free_textures(t_textures *textures, t_data *data)
 int	clean_exit(t_data *data)
 {
 	free_map(&data->map);
-    if (data->mlx_start)
-    {
-        if (data->mlx_window)
-        {
-            free_textures(&data->textures, data);
-            mlx_destroy_window(data->mlx_start, data->mlx_window);
-        }
-        mlx_destroy_display(data->mlx_start);
-        free(data->mlx_start);
-    }
+	if (data->mlx_start)
+	{
+		if (data->mlx_window)
+		{
+			free_textures(&data->textures, data);
+			mlx_destroy_window(data->mlx_start, data->mlx_window);
+		}
+		mlx_destroy_display(data->mlx_start);
+		free(data->mlx_start);
+	}
 	exit(0);
 }

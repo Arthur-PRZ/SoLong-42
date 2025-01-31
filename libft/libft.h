@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:44:00 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/21 10:24:10 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/31 12:36:25 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 3
 # endif
-
 
 typedef struct s_list
 {
@@ -77,7 +76,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 char	*get_next_line(int fd);
-int		ft_strlen_gnl(char *str, int a);
+int		ft_strlen_g(char *str, int a);
 char	*ft_strcpy(char *dest, char *src);
 int		ft_strchr_gnl(char *str, char c);
 char	*ft_readline(int fd, char *buffer);
@@ -96,6 +95,5 @@ int		base16(unsigned int nbr, char c);
 int		print_p(void *ptr);
 int		uns_ft_putnbr(unsigned int n);
 int		long_base16(unsigned long nbr, char c);
-
 
 #endif

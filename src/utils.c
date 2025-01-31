@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:39:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/30 11:43:21 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/31 12:57:39 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ char	*ft_strjoin0(char const *s1, char const *s2)
 
 void	map_giving(t_map *rmap, t_map *map)
 {
-	int i;
+	int	i;
 	int	a;
-	
+
 	i = 0;
 	a = 0;
 	rmap->grid = malloc(map->height * sizeof(char *));
@@ -75,10 +75,10 @@ void	findexit(t_data *ptr)
 {
 	int	i;
 	int	a;
-	
+
 	i = 0;
 	a = 0;
-	while(ptr->map.grid[a][i] != 'E')
+	while (ptr->map.grid[a][i] != 'E')
 	{
 		i++;
 		if (i > ptr->map.width)
@@ -87,8 +87,22 @@ void	findexit(t_data *ptr)
 			a++;
 		}
 		if (a > ptr->map.height - 1)
-		 	break ;
+			break ;
 	}
 	ptr->playerpos.exitwidth = i;
 	ptr->playerpos.exitheight = a;
+}
+
+void	check_arguments(int argc, char *str)
+{
+	if (argc != 2)
+	{
+		write(2, "Error\nNumber of argument invalid", 33);
+		exit(0);
+	}
+	if (check_map_name(str) == 1)
+	{
+		write(2, "Error\nMap name invalid", 23);
+		exit(0);
+	}
 }

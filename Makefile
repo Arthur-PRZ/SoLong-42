@@ -6,7 +6,7 @@
 #    By: artperez <artperez@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/10 10:15:26 by artperez          #+#    #+#              #
-#    Updated: 2025/01/30 11:09:37 by artperez         ###   ########.fr        #
+#    Updated: 2025/01/31 11:28:50 by artperez         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ FC = src/so_long.c \
 		src/clean.c \
 		src/movement.c \
 		src/utils.c \
-		src/taking_map.c
+		src/taking_map.c \
+		src/put_image.c
 
 FO = $(FC:.c=.o)
 

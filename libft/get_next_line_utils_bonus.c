@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 14:43:34 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/14 10:32:19 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/31 10:55:46 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*ft_calloc_gnl(size_t nmemb, size_t size)
 	return (tab);
 }
 
-int	ft_strlen_gnl(char *str, int a)
+int	ft_strlen_g(char *str, int a)
 {
 	int	i;
 
@@ -94,7 +94,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	a = 0;
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	str = ft_calloc(ft_strlen_gnl(s2, 1) + ft_strlen_gnl(s1, 1) + 1, sizeof(char));
+	str = ft_calloc(ft_strlen_g(s2, 1) + ft_strlen_g(s1, 1) + 1, sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	while (s1[i] != '\0')

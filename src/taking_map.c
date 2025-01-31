@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:39:55 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/30 10:53:24 by artperez         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:07:21 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	count_height(char *file)
 	int		fd;
 	char	*line;
 	int		height;
-	
+
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (1);
@@ -45,7 +45,7 @@ char	*readline(int fd)
 	len = ft_strlen(line);
 	if (line[len - 1] == '\n')
 		line[len - 1] = '\0';
-	return (line);		
+	return (line);
 }
 
 void	get_map(t_map *ptrptr, char *map_name)
@@ -58,7 +58,6 @@ void	get_map(t_map *ptrptr, char *map_name)
 	file = open(map_name, O_RDONLY);
 	if (file == -1)
 		return ;
-
 	while (i < ptrptr->height)
 	{
 		ptrptr->grid[i] = ft_calloc(1, sizeof(char));
