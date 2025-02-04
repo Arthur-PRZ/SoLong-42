@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:39:55 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/31 11:07:21 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/04 09:53:43 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,14 @@ size_t	count_height(char *file)
 char	*readline(int fd)
 {
 	char	*line;
-	int		len;
 
 	line = get_next_line(fd);
 	if (line == NULL)
 		return (NULL);
-	len = ft_strlen(line);
-	if (line[len - 1] == '\n')
-		line[len - 1] = '\0';
 	return (line);
 }
 
-void	get_map(t_map *ptrptr, char *map_name)
+int	get_map(t_map *ptrptr, char *map_name)
 {
 	char	*line;
 	int		file;
@@ -57,19 +53,20 @@ void	get_map(t_map *ptrptr, char *map_name)
 	i = 0;
 	file = open(map_name, O_RDONLY);
 	if (file == -1)
-		return ;
+		return (1);
 	while (i < ptrptr->height)
 	{
 		ptrptr->grid[i] = ft_calloc(1, sizeof(char));
 		line = get_next_line(file);
 		if (line != NULL)
 			ptrptr->grid[i] = ft_strjoin0(ptrptr->grid[i], line);
-		if (line == NULL && i == ptrptr->height - 1)
-			ptrptr->grid[i] = NULL;
 		i++;
 		free(line);
 	}
 	line = get_next_line(file);
 	free(line);
 	close(file);
+	if (i == 0)
+		return (free_map(ptrptr), 1);
+	return (0);
 }

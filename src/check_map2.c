@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 10:39:33 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/31 11:26:45 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/04 09:18:33 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	check_map_size(t_map *ptr)
 
 	i = 0;
 	len = ft_strlen(ptr->grid[i]);
-	while (i != ptr->height - 1)
+	while (i != ptr->height)
 	{
 		if (len != ft_strlen(ptr->grid[i]))
 			return (1);

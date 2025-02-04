@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:32:58 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/31 11:28:13 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/04 09:50:16 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				handle_input(int keysym, t_data *ptr);
 int				clean_exit(t_data *data);
 size_t			count_height(char *file);
 char			*ft_strjoin0(char const *s1, char const *s2);
-void			get_map(t_map *ptrptr, char *map_name);
+int			get_map(t_map *ptrptr, char *map_name);
 void			taking_map(char *map_name, t_map *ptr);
 int				check_map(t_map *ptr, t_playerpos *pos, t_map *map);
 int				check_map_close_mid(t_map *ptr);

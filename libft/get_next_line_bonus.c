@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:36:09 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/14 10:32:27 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/03 09:23:40 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*update_buffer(char *buffer)
 		i++;
 	if (!buffer[i])
 		return (free(buffer), NULL);
-	new_buffer = ft_calloc((ft_strlen_gnl(buffer + i, 1) + 2), sizeof(char));
+	new_buffer = ft_calloc((ft_strlen_g(buffer + i, 1) + 2), sizeof(char));
 	if (new_buffer == NULL)
 		return (NULL);
 	i++;
@@ -114,7 +114,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer[fd] = ft_readline(fd, buffer[fd]);
-	if (ft_strlen_gnl(buffer[fd], 0) == 0)
+	if (ft_strlen_g(buffer[fd], 0) == 0)
 	{
 		free(buffer[fd]);
 		buffer[fd] = NULL;
