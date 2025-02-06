@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 09:34:59 by artperez          #+#    #+#             */
-/*   Updated: 2025/02/04 09:53:49 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/04 10:10:18 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	taking_map(char *map_name, t_map *ptr)
 	ptr->grid = malloc(sizeof(char *) * ptr->height);
 	if (get_map(ptr, map_name) == 1)
 	{
-		write(2,"Error\nMap invalid", 18);
+		write (2, "Error\nMap invalid", 18);
 		exit (0);
 	}
 	if (ptr->grid == NULL)

@@ -6,7 +6,7 @@
 /*   By: artperez <artperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 14:44:00 by artperez          #+#    #+#             */
-/*   Updated: 2025/01/31 12:36:25 by artperez         ###   ########.fr       */
+/*   Updated: 2025/02/06 09:06:14 by artperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int		ft_strchr_gnl(char *str, char c);
 char	*ft_readline(int fd, char *buffer);
 char	*ft_getline(char *buffer);
 char	*ft_strjoin_gnl(char *s1, char *s2);
-// void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_free(char *buffer, char *temp_buf);
 size_t	ft_strlen_printf(const char *s);
 int		ft_printf(const char *format, ...);
